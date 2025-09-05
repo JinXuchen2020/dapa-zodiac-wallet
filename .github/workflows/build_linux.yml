@@ -1,0 +1,50 @@
+name: Build Linux
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update packages
+        run: sudo apt-get update -y && sudo apt-get upgrade -y
+
+      - name: Install system libraries
+        run: sudo apt-get install clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+
+      - name: Install Rust and Cargo
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install Flutter Rust bridge
+        run: |
+          cargo install 'flutter_rust_bridge_codegen'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate bridge code
+        run: flutter_rust_bridge_codegen generate
+
+      - name: Generate Dart code
+        run: dart run build_runner build -d
+
+      - name: Build Linux app
+        run: flutter build linux --release
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zodiac-linux
+          path: build/linux/x64/release/bundle

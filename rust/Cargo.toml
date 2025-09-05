@@ -1,0 +1,32 @@
+[package]
+name = "rust_lib"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = { version = "=2.11.1", features = ["log"] }
+anyhow = "1"
+indexmap = { version = "2.0.0", features = ["serde"] }
+log = "0.4"
+parking_lot = "0.12.1"
+simplelog = "0.12.1"
+lazy_static = "1.4.0"
+serde_json = "1"
+dapa_wallet = { git = "https://github.com/k7n2g/dapa-blockchain", branch = "main", package = "dapa_wallet", default-features = false }
+dapa_common = { git = "https://github.com/k7n2g/dapa-blockchain", branch = "main", package = "dapa_common" }
+serde = { version = "1.0.197", features = ["derive"] }
+trie-rs = "0.4.2"
+regex = "1.11.1"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.92"
+
+[features]
+default = ["dapa_wallet/api_server"]
+network_handler = ["dapa_wallet/network_handler"]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
