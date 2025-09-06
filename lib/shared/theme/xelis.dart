@@ -54,7 +54,7 @@ ThemeData dapaTheme() {
       MoreColors(
         bgRadialColor1: const Color.fromARGB(255, 0, 170, 129),
         bgRadialColor2: const Color.fromARGB(178, 5, 124, 132),
-        bgRadialColor3: const Color.fromARGB(153, 0, 170, 150),
+        bgRadialColor3: const Color.fromARGB(255, 18,31,212),
         bgRadialEndColor: const Color.fromARGB(255, 0, 0, 0),
         mutedColor: textColor.withValues(alpha: 0.6),
       ),
